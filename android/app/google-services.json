@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "502924372586",
+    "project_id": "nexuslegend-2ed94",
+    "storage_bucket": "nexuslegend-2ed94.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:502924372586:android:9de5eb21574f8ca21f3813",
+        "android_client_info": {
+          "package_name": "its.ict.nexus_legend.nexus_legend"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJf03G1NFU3fvcfkirswmWIDiW_ix3uAU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
