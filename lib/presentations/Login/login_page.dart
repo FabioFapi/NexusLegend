@@ -6,6 +6,11 @@ import '../../services/auth.dart';
 import 'login_cubit.dart';
 import 'login_state.dart';
 
+// Define the color scheme
+const darkNavy = Color(0xFF0A0B35);
+const accentPurple = Color(0xFF6E3AFA);
+const lightPink = Color(0xFFF5B6FF);
+
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
@@ -24,6 +29,7 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: darkNavy,
       body: BlocListener<LoginCubit, LoginState>(
         listener: (context, state) {
           if (state.status == LoginStatus.failure) {
@@ -45,13 +51,15 @@ class LoginView extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(24.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  const SizedBox(height: 48),
+                  _LoginLogo(),
                   const SizedBox(height: 32),
                   _LoginHeader(),
                   const SizedBox(height: 48),
                   _LoginForm(),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 24),
                   _LoginButton(),
                   const SizedBox(height: 24),
                   _SignInLink(),
@@ -65,23 +73,34 @@ class LoginView extends StatelessWidget {
   }
 }
 
+class _LoginLogo extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 100,
+      height: 100,
+      padding: const EdgeInsets.all(8),
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+      ),
+      child: const Image(
+        image: AssetImage('assets/images/logo.png'), // You'll need to add this to your pubspec.yaml
+        fit: BoxFit.contain,
+      ),
+    );
+  }
+}
+
 class _LoginHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Bentornato,',
+          'Benvenuto',
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
             fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          'Accedi per continuare',
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            color: Colors.grey[600],
+            color: Colors.white,
           ),
         ),
       ],
@@ -113,23 +132,25 @@ class _EmailField extends StatelessWidget {
           onChanged: (email) => context.read<LoginCubit>().emailChanged(email),
           keyboardType: TextInputType.emailAddress,
           autocorrect: false,
+          style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
-            labelText: 'Email',
-            hintText: 'Inserisci la tua email',
-            prefixIcon: const Icon(Icons.email_outlined),
+            labelText: 'Username',
+            labelStyle: const TextStyle(color: Colors.white70),
+            hintStyle: const TextStyle(color: Colors.white54),
+            prefixIcon: const Icon(Icons.person_outline, color: Colors.white70),
+            filled: true,
+            fillColor: Colors.white.withOpacity(0.1),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide.none,
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey[300]!),
+              borderSide: BorderSide.none,
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: Theme.of(context).primaryColor,
-                width: 2,
-              ),
+              borderSide: const BorderSide(color: accentPurple, width: 2),
             ),
           ),
         );
@@ -154,13 +175,16 @@ class _PasswordFieldState extends State<_PasswordField> {
         return TextFormField(
           onChanged: (password) => context.read<LoginCubit>().passwordChanged(password),
           obscureText: _obscureText,
+          style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
             labelText: 'Password',
-            hintText: 'Inserisci la tua password',
-            prefixIcon: const Icon(Icons.lock_outlined),
+            labelStyle: const TextStyle(color: Colors.white70),
+            hintStyle: const TextStyle(color: Colors.white54),
+            prefixIcon: const Icon(Icons.lock_outline, color: Colors.white70),
             suffixIcon: IconButton(
               icon: Icon(
                 _obscureText ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                color: Colors.white70,
               ),
               onPressed: () {
                 setState(() {
@@ -168,19 +192,19 @@ class _PasswordFieldState extends State<_PasswordField> {
                 });
               },
             ),
+            filled: true,
+            fillColor: Colors.white.withOpacity(0.1),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide.none,
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey[300]!),
+              borderSide: BorderSide.none,
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: Theme.of(context).primaryColor,
-                width: 2,
-              ),
+              borderSide: const BorderSide(color: accentPurple, width: 2),
             ),
           ),
         );
@@ -196,20 +220,22 @@ class _LoginButton extends StatelessWidget {
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
         return state.status == LoginStatus.loading
-            ? const Center(child: CircularProgressIndicator())
+            ? const CircularProgressIndicator(color: accentPurple)
             : ElevatedButton(
           onPressed: () => context.read<LoginCubit>().loginWithCredentials(),
           style: ElevatedButton.styleFrom(
+            backgroundColor: accentPurple,
             minimumSize: const Size(double.infinity, 56),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
           ),
           child: const Text(
-            'ACCEDI',
+            'Login',
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
           ),
         );
@@ -221,24 +247,25 @@ class _LoginButton extends StatelessWidget {
 class _SignInLink extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Non hai ancora un account?',
-            style: Theme.of(context).textTheme.bodyMedium,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text(
+          'Hai già un account?',
+          style: TextStyle(color: Colors.white70),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const SignInPage()),
+            );
+          },
+          child: const Text(
+            'Accedi',
+            style: TextStyle(color: accentPurple),
           ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const SignInPage()),
-              );
-            },
-            child: const Text('Registrati'),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
